@@ -16,3 +16,22 @@ y_test = y_te['SR.p53'][rows_te]
 x_test = x_te[rows_te]
 
 y_train
+x_train
+y_test
+x_test
+
+label_counts = y_train.value_counts()
+active = float(label_counts[1])
+inactive = float(label_counts[0])
+wpos = inactive/active
+from xgboost import XGBClassifier
+from sklearn.model_selection import KFold, cross_val_score
+model = XGBClassifier(scale_pos_weight = wpos)
+kfold = KFold(n_splits = 7)
+results = cross_val_score(model, x_train, y_train, cv = kfold)
+print('accuracy: %.3f%% (%.3f%%)' % (results.mean()*100, results.std()*100))
+
+model = XGBClassifier(scale_pos_weight = wpos)
+model.fit(x_train, y_train)
+for feature, importance in zip(x_train, model.feature_importances_):
+    print(feature, importance*100.0)
