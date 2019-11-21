@@ -35,3 +35,5 @@ model = XGBClassifier(scale_pos_weight = wpos)
 model.fit(x_train, y_train)
 for feature, importance in zip(x_train, model.feature_importances_):
     print(feature, importance*100.0)
+
+    
